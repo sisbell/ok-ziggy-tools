@@ -1,0 +1,25 @@
+name: ok_ziggy_tools
+description: A build tool for creating a catalog intended for consumption by large language model chatbots.
+version: 0.1.0
+repository: https://github.com/sisbell/ok-ziggy-tools
+issue_tracker: https://github.com/sisbell/ok-ziggy-tools/issues
+executables:
+  zigt:
+platforms:
+  linux:
+  macos:
+  windows:
+
+environment:
+  sdk: ^3.0.1
+
+dependencies:
+  args: ^2.4.0
+  crypto: ^3.0.3
+  file: ^6.1.4
+  http: ^0.13.0
+  path: ^1.8.3
+  yaml: ^3.1.1
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
