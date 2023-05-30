@@ -7,19 +7,20 @@ final localFileSystem = LocalFileSystem();
 void main(List<String> arguments) async {
   CommandRunner("zigt",
       "A build tool for creating a catalog intended for consumption by large language model chatbots")
-    ..addCommand(BuildCatalogCommand())
+    ..addCommand(CreateCatalogCommand())
     ..addCommand(CopyCatalogCommand())
+    ..addCommand(InitServerCommand())
     ..run(arguments);
 }
 
-class BuildCatalogCommand extends Command {
+class CreateCatalogCommand extends Command {
   @override
   String get description => "Creates the catalog";
 
   @override
   String get name => "create";
 
-  BuildCatalogCommand() {
+  CreateCatalogCommand() {
     argParser.addOption('input',
         abbr: 'i',
         defaultsTo: "domains.json",
@@ -51,5 +52,23 @@ class CopyCatalogCommand extends Command {
     final targetDirectory = argResults?["targetDir"];
     final tool = BuildTool(LocalFileSystem(), "build");
     await tool.copyCatalog(targetDirectory);
+  }
+}
+
+class InitServerCommand extends Command {
+  @override
+  String get description => "Initializes OK Ziggy Server Setup";
+
+  @override
+  String get name => "init";
+
+  InitServerCommand();
+
+  @override
+  Future<void> run() async {
+    final tool = BuildTool(localFileSystem, "build");
+    await tool.downloadAndUnzip("data");
+    await tool.buildCatalog("data/sample-domains.json");
+    await tool.copyCatalog("data");
   }
 }

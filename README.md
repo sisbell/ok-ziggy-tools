@@ -142,3 +142,6 @@ This maps a service path to a content-type.
 }
 ```
 
+## Initialize Server Project
+This command initializes the data directory needed to run a server
+> zigt init

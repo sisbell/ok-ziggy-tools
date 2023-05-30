@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
 import 'package:file/file.dart';
 import 'package:http/http.dart' as http;
@@ -330,5 +331,27 @@ class BuildTool {
       });
     });
     return contentTypes;
+  }
+
+//
+  Future<void> downloadAndUnzip(outputDirPath) async {
+    final url =
+        "https://storage.googleapis.com/zapvine-prod.appspot.com/ziggy/ok-ziggy-config.zip";
+    var client = http.Client();
+    var req = await client.get(Uri.parse(url));
+    List<int> bytes = req.bodyBytes;
+    Archive archive = ZipDecoder().decodeBytes(bytes);
+    for (ArchiveFile file in archive) {
+      String filename = file.name;
+      if (file.isFile) {
+        List<int> data = file.content;
+        File outFile = fileSystem.file(p.join(outputDirPath, filename));
+        outFile = await outFile.create(recursive: true);
+        await outFile.writeAsBytes(data);
+      } else {
+        await io.Directory(p.join(outputDirPath, filename))
+            .create(recursive: true);
+      }
+    }
   }
 }
